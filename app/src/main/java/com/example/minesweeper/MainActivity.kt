@@ -15,6 +15,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //when user clicks on Make Custom Button
+        customBoard_button.setOnClickListener{
+            val intent = Intent(this@MainActivity, CustomBoard::class.java).apply {
+                putExtra("height", 9)  //put the value
+                putExtra("width", 9)
+                putExtra("mines", 40)
+            }
+            startActivity(intent)
+        }
+
         // if user clicks on easy radio button
         easy_button.setOnClickListener {
             level="easy"
