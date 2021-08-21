@@ -17,7 +17,7 @@ class CustomBoard : AppCompatActivity() {
         val mines = findViewById<TextInputLayout>(R.id.mi)
 
 
-/* when user clicks submit button */
+        // when user clicks submit button
         submit.setOnClickListener {
 
             //after clicking submit button, this will transfer or pass the value which the user has entered
@@ -25,7 +25,7 @@ class CustomBoard : AppCompatActivity() {
             var widt = Integer.parseInt(width.editText?.text.toString())
             var mine = Integer.parseInt(mines.editText?.text.toString())
 
-            /* passing the values to the gameplay activity */
+            // passing the values to the gameplay activity
             val intent = Intent(this, GamePlay::class.java).apply {
                 putExtra("height", heigh)  //put the value
                 putExtra("width", widt)

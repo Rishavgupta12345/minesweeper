@@ -1,5 +1,7 @@
 package com.example.minesweeper
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
@@ -7,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.board.*
 
 class GamePlay: AppCompatActivity() {
+
+    var choice : Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +36,26 @@ class GamePlay: AppCompatActivity() {
             SetUpBoard(row, col, mine)
         }
 
+        // Restarting the game
+        restart_button.setOnClickListener{
+            gameRestart()
+        }
+
     }
+
     private fun SetUpBoard (row: Int, col: Int, mine: Int)
     {
+
+        action_click.setOnClickListener{
+            if(choice==1) {
+                action_click.setImageResource(R.drawable.flag)
+                choice=2
+            }else{
+                action_click.setImageResource(R.drawable.mine)
+                choice=1
+            }
+        }
+
         //set the layout
         var counter = 1
 
@@ -68,6 +89,54 @@ class GamePlay: AppCompatActivity() {
             main_buttons.addView(linearLayout)
         }
 
+    }
+
+    private fun gameRestart() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+        builder.setMessage("Do you want to restart the game ?")
+        builder.setTitle("Alert!")
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes"
+        ){ dialog, which ->
+            val intent = getIntent()
+            finish()
+            startActivity(intent)
+        }
+
+        builder.setNegativeButton("No", object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+            }
+        })
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    // On pressing back button
+    override fun onBackPressed() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+        builder.setMessage("Are you sure you want to exit the game?")
+        builder.setTitle("Game is still ongoing!")
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes"
+        ){ dialog, which ->
+           // updateScore()
+           // toMainActivity()
+            finish()
+            super.onBackPressed()
+        }
+
+        builder.setNegativeButton("No", object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+            }
+        })
+
+        val alertDialog = builder.create()
+        alertDialog.show()
     }
 
 }

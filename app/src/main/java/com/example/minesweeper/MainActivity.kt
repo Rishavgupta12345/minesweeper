@@ -83,4 +83,9 @@ class MainActivity : AppCompatActivity() {
         val alertDialog = builder.create()
         alertDialog.show()
     }
+
+    override fun onBackPressed() {
+        finishAffinity()
+    }
+
 }
