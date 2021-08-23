@@ -11,6 +11,8 @@
     <string name="best_time_15s">BEST TIME :- 15s</string>
     <string name="last_game_time_45s">LAST GAME TIME :- 45s</string>
     <string name="_1">1</string>
+    <string name="saved_high_score_key">highscore</string>
+    <string name="last_time">lastTime</string>
     <string name="_45">45</string>
     <string name="time">TIME</string>
     <string name="mines">MINES</string>
@@ -32,4 +34,5 @@
     <string name="enter_mines">Enter Mines*</string>
     <string name="enter_the_dimensions">Enter The Dimensions</string>
     <string name="submit">Submit</string>
+    <string name="your_best_time">YOUR BEST TIME</string>
 </resources>

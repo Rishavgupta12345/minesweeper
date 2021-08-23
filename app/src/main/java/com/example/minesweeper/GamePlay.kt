@@ -1,9 +1,15 @@
 package com.example.minesweeper
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.SystemClock
+import android.util.Log
 import android.widget.Button
+import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,13 +18,29 @@ import kotlin.random.Random
 
 class GamePlay: AppCompatActivity() {
 
+    private lateinit var chronometer : Chronometer
+
     var choice : Int = 1
-    var status  = Status.ONGOING
     var flaggedMines = 0
+    var fastestTime = " NA"
+    var lastGameTime = " NA"
+    var status  = Status.ONGOING
+    private lateinit var chronomter: Chronometer
+    private var isPlay = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board)
+
+        chronomter = findViewById(R.id.time_count)
+
+        if (!isPlay){
+            chronomter.base = SystemClock.elapsedRealtime()
+            chronomter.start()
+            Toast.makeText(this, "Game Starts", Toast.LENGTH_SHORT).show()
+            isPlay  =true
+
+        }
 
         val intent = intent
         var flag = intent.getIntExtra("flag", 2)
@@ -108,7 +130,7 @@ class GamePlay: AppCompatActivity() {
                         setMines(i,j,mine,cellBoard,row,col)
 
                         //Start Timer
-                        //startTimer()
+                        startTimer()
 
                     }
 
@@ -125,6 +147,40 @@ class GamePlay: AppCompatActivity() {
 
     }
 
+    private fun setMines(row:Int, col:Int, mine:Int, cellBoard:Array<Array<MineCell>>,rowSize:Int, colSize:Int) {
+        //Generate random coordinates to set mine
+        var mineCount = mine
+        var i=1
+        while(i<=mineCount){
+            var r = (Random(System.nanoTime()).nextInt(0, rowSize))
+            var c = (Random(System.nanoTime()).nextInt(0, colSize))
+            if(r==row || cellBoard[r][c].isMine){
+                continue
+            }
+            cellBoard[r][c].isMine = true
+            cellBoard[r][c].value = -1
+            updateNeighbours(r,c,cellBoard,rowSize,colSize)
+            i++;
+        }
+    }
+
+    // Update the neighbours after setting mine
+    private fun updateNeighbours(row: Int,column: Int,cellBoard: Array<Array<MineCell>>,rowSize:Int,colSize:Int) {
+        for (i in movement) {
+            for (j in movement) {
+                if(((row+i) in 0 until rowSize) && ((column+j) in 0 until colSize) && cellBoard[row+i][column+j].value != MINE)
+                    cellBoard[row+i][column+j].value++
+            }
+        }
+    }
+
+    //    timer will start when user first clicks on the board
+    private fun startTimer(){
+        chronometer = findViewById(R.id.time_count)
+        chronometer.base = SystemClock.elapsedRealtime()
+        chronometer.start()
+    }
+
     // Move function
     private fun move(choice: Int, x: Int, y:Int, cellBoard:Array<Array<MineCell>>, rowSize: Int,colSize: Int,mine:Int): Boolean{
 
@@ -134,7 +190,7 @@ class GamePlay: AppCompatActivity() {
             }
             if(cellBoard[x][y].value == MINE){
                 status = Status.LOST;
-                //updateScore()
+                updateScore()
                 return true
             }
             else if(cellBoard[x][y].value >0){
@@ -198,32 +254,7 @@ class GamePlay: AppCompatActivity() {
 
     }
 
-    private fun setMines(row:Int, col:Int, mine:Int, cellBoard:Array<Array<MineCell>>,rowSize:Int, colSize:Int) {
-        //Generate random coordinates to set mine
-        var mineCount = mine
-        var i=1
-        while(i<=mineCount){
-            var r = (Random(System.nanoTime()).nextInt(0, rowSize))
-            var c = (Random(System.nanoTime()).nextInt(0, colSize))
-            if(r==row || cellBoard[r][c].isMine){
-                continue
-            }
-            cellBoard[r][c].isMine = true
-            cellBoard[r][c].value = -1
-            updateNeighbours(r,c,cellBoard,rowSize,colSize)
-            i++;
-        }
-    }
 
-    // Update the neighbours after setting mine
-    private fun updateNeighbours(row: Int,column: Int,cellBoard: Array<Array<MineCell>>,rowSize:Int,colSize:Int) {
-        for (i in movement) {
-            for (j in movement) {
-                if(((row+i) in 0 until rowSize) && ((column+j) in 0 until colSize) && cellBoard[row+i][column+j].value != MINE)
-                    cellBoard[row+i][column+j].value++
-            }
-        }
-    }
 
     // To update status (ongoing/won)
     private fun checkStatus(cellBoard:Array<Array<MineCell>>, rowSize:Int, colSize: Int){
@@ -242,11 +273,11 @@ class GamePlay: AppCompatActivity() {
         if(flag1==0 || flag2==0) status = Status.WON
         else status = Status.ONGOING
 
-        //if(status==Status.WON) updateScore()
+        if(status==Status.WON) updateScore()
 
     }
 
-
+    //restart game using smilyincon
     private fun gameRestart() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
@@ -278,8 +309,8 @@ class GamePlay: AppCompatActivity() {
 
         builder.setPositiveButton("Yes"
         ){ dialog, which ->
-           // updateScore()
-           // toMainActivity()
+            updateScore()
+            toMainActivity()
             finish()
             super.onBackPressed()
         }
@@ -293,6 +324,97 @@ class GamePlay: AppCompatActivity() {
         alertDialog.show()
     }
 
+    // Saving chromometer state
+    // This function is used to update and store highscore and lastgame time
+    private fun updateScore(){
+        chronometer.stop()
+
+        // Getting elapsed time from chronometer
+        val elapsedTime = SystemClock.elapsedRealtime() - chronometer.base;
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val lastTime = elapsedTime.toInt()
+
+        // Setting up highscore
+        var highScore = sharedPref.getInt(getString(R.string.saved_high_score_key), Integer.MAX_VALUE)
+
+        var isHighScore=false
+
+        // Comparing high score if the last game's status is won
+        if(status==Status.WON) {
+            if (lastTime < highScore) {
+                highScore = lastTime
+                isHighScore = true
+            }
+            with(sharedPref.edit()) {
+                putInt(getString(R.string.saved_high_score_key), highScore)
+                putInt(getString(R.string.last_time), lastTime)
+                commit()
+            }
+            // Setting time formats to send to another activity
+            lastGameTime = ""+((lastTime / 1000) / 60)+" m "+((lastTime / 1000) % 60)+" s"
+        }
+        else{
+            lastGameTime = " Lost!"
+            fastestTime = " NA"
+        }
+
+        if(highScore==Integer.MAX_VALUE){
+            fastestTime = " NA"
+        }
+        else {
+            // Setting time formats to send to another activity
+            fastestTime = "" + ((highScore / 1000) / 60) + " m " + ((highScore / 1000) % 60) + " s";
+        }
+
+//        if user WIN then sending the result to result activity
+        if(status == Status.WON){
+
+
+            var currentTime=time_count.text.toString()
+            println("current time $currentTime" )
+            val sharedPreferences: SharedPreferences =
+                this.getSharedPreferences("time", Context.MODE_PRIVATE)
+
+            val best=sharedPreferences.getString("Best","00.00")
+            if(best!! > currentTime){
+                sharedPreferences.edit().putString("Best",currentTime).apply()
+            }
+           time_count.stop()
+
+            Toast.makeText(this, "BADHAI HOO JIT GAYE APP .... PARTY ?? ", Toast.LENGTH_SHORT).show()
+        }
+
+//        if user LOST then seding the result to main activity
+        else if(status == Status.LOST){
+
+            var currentTime=time_count.text.toString()
+            println("current time $currentTime" )
+
+            val sharedPreferences: SharedPreferences =
+                this.getSharedPreferences("time", Context.MODE_PRIVATE)
+
+            sharedPreferences.edit().putString("Last",currentTime).apply()
+            time_count.stop()
+
+            Toast.makeText(this, "YOU LOST BROOO ... READ THE INSTRUCTIONS PROVIDED IN THE i BUTTON AND TRY AGAIN", Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+
+    // This will carry data to store highscore and last game time
+    // on getting back to main activity
+    private fun toMainActivity(){
+        Log.d("MainActivity", "inside to main$fastestTime $lastGameTime")
+        val intent = Intent(this@GamePlay,MainActivity::class.java)
+        intent.putExtra("highScore",fastestTime)
+        intent.putExtra("lastTime",lastGameTime)
+        startActivity(intent)
+    }
+
+
+
+
     // It will display the buttons according to the game status
     private fun display(cellBoard:Array<Array<MineCell>>) {
         cellBoard.forEach { row ->
@@ -305,10 +427,10 @@ class GamePlay: AppCompatActivity() {
                     restart_button.setBackgroundResource(R.drawable.sadhubohot)
                     it.setBackgroundResource(R.drawable.mine)
                 }
-                //To show that mine is not present here but it is marked
-//                if(status == Status.LOST && it.isMarked && !it.isMine){
-//                    it.setBackgroundResource(R.drawable.crossedflag)
-//                }
+               // To show that mine is not present here but it is marked
+                if(status == Status.LOST && it.isMarked && !it.isMine){
+                    it.setBackgroundResource(R.drawable.crossedflag)
+                }
                 else if (status == Status.WON && it.value == MINE) {
                     it.setBackgroundResource(R.drawable.flag)
                     restart_button.setBackgroundResource(R.drawable.happy)
