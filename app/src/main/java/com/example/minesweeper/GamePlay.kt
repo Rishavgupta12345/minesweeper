@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
-import android.widget.Button
 import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.Toast
