@@ -254,7 +254,6 @@ class GamePlay: AppCompatActivity() {
     }
 
 
-
     // To update status (ongoing/won)
     private fun checkStatus(cellBoard:Array<Array<MineCell>>, rowSize:Int, colSize: Int){
         var flag1=0
@@ -276,7 +275,7 @@ class GamePlay: AppCompatActivity() {
 
     }
 
-    //restart game using smilyincon
+    //restart game
     private fun gameRestart() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
@@ -380,7 +379,11 @@ class GamePlay: AppCompatActivity() {
             }
            time_count.stop()
 
-            Toast.makeText(this, "BADHAI HOO JIT GAYE APP .... PARTY ?? ", Toast.LENGTH_SHORT).show()
+            val intent= Intent(this, results::class.java).apply{
+                putExtra("result","Badhai hoo jit gai app\nPARTY ??")
+            }
+            startActivity(intent)
+
         }
 
 //        if user LOST then seding the result to main activity
@@ -393,9 +396,13 @@ class GamePlay: AppCompatActivity() {
                 this.getSharedPreferences("time", Context.MODE_PRIVATE)
 
             sharedPreferences.edit().putString("Last",currentTime).apply()
-            time_count.stop()
+            //time_count.stop()
 
-            Toast.makeText(this, "YOU LOST BROOO ... READ THE INSTRUCTIONS PROVIDED IN THE i BUTTON AND TRY AGAIN", Toast.LENGTH_LONG).show()
+            val intent= Intent(this, results::class.java).apply{
+                putExtra("result","You Lost bro !!!\n read the instructions in the I button and Try Again")
+            }
+            startActivity(intent)
+
         }
 
     }
