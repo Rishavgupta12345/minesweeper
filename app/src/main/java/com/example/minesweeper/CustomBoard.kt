@@ -1,5 +1,6 @@
 package com.example.minesweeper
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,28 @@ class CustomBoard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.custom_layout_maker)
+
+        //user instructions for the custom board
+        NOTICE.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+            builder.setTitle("NOTICE")
+            builder.setMessage("The game has its maximum height and width to a limit which is 20.\n" +
+                    "\n" +
+                    "And logically you can't enter the mines more than the number of cells present (which is height x width) .\n" +
+                    "\n" +
+                    "Happy mine hunting!!!")
+
+            builder.setCancelable(false)
+
+            builder.setPositiveButton("OK"
+            ){ dialog, which ->
+
+            }
+
+            val alertDialog = builder.create()
+            alertDialog.show()
+        }
 
         // edit text
         val height = findViewById<TextInputLayout>(R.id.hi)

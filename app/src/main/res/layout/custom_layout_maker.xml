@@ -31,7 +31,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:ignore="TextContrastCheck" />
+                    tools:ignore="TextContrastCheck"
+                    android:digits="0123456789"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,7 +50,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:ignore="TextContrastCheck" />
+                    tools:ignore="TextContrastCheck"
+                    android:digits="0123456789"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,7 +69,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:ignore="TextContrastCheck" />
+                    tools:ignore="TextContrastCheck"
+                    android:digits="0123456789"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,7 +79,7 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="108dp"
+                android:layout_marginTop="152dp"
                 android:padding="10dp"
                 android:text="@string/enter_the_dimensions"
                 android:textColor="#00008B"
@@ -90,15 +93,26 @@
                 android:id="@+id/submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="128dp"
 
+                android:layout_marginTop="88dp"
                 android:text="@string/submit"
                 android:textColor="#000"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textView"
-                app:layout_constraintHorizontal_bias="0.496"
-                app:layout_constraintStart_toStartOf="@+id/textView" />
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/mi" />
+
+            <Button
+                android:id="@+id/NOTICE"
+                android:layout_width="80dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/notice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.486"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
