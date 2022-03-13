@@ -1,5 +1,4 @@
 package com.example.minesweeper
-
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -76,11 +75,11 @@ class MainActivity : AppCompatActivity() {
         builder.setTitle("INSTRUCTIONS")
         builder.setMessage("The purpose of the game is to open all the cells of the board which do not contain a bomb. You lose if you set off a bomb cell.\n" +
                 "\n" +
-                "Every non-bomb cell you open will tell you the total number of bombs in the eight neighboring cells. Once you are sure that a cell contains a bomb, you can right-click to put a flag it on it as a reminder. Once you have flagged all the bombs around an open cell, you can quickly open the remaining non-bomb cells by shift-clicking on the cell.\n" +
+                "Every non-bomb cell you open will tell you the total number of bombs in the eight neighboring cells. Once you are sure that a cell contains a bomb, you can change the mine to flag (by clicking on the mine button above) to put a flag it on it as a reminder. Once you have flagged all the bombs around an open cell, you can quickly open the remaining non-bomb.\n" +
                 "\n" +
-                "To start a new game (abandoning the current one), just click on the yellow face button.\n" +
+                "To start a new game (abandoning the current one), just click on the RESTART button.\n" +
                 "\n" +
-                "Happy mine hunting!")
+                "Happy mine hunting!!!")
 
         builder.setCancelable(false)
 
