@@ -12,43 +12,52 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:fillViewport="true"
-      tools:layout_editor_absoluteX="0dp"
+      tools:layout_editor_absoluteX="-201dp"
 
-      tools:layout_editor_absoluteY="-35dp">
+      tools:layout_editor_absoluteY="110dp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"><![CDATA[
 
+
+
+
+
+      app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/show_name"/>
+
+
+
+
+
+      ]]>
 
       <TextView
           android:id="@+id/show_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
 
-          android:layout_marginTop="16dp"
-
-          android:layout_marginBottom="8dp"
+          android:layout_marginTop="36dp"
 
 
+          android:textSize="20sp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintHorizontal_bias="0.498"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
-
 
       <TextView
           android:id="@+id/show_result"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
 
-          android:layout_marginTop="7dp"
-
-          android:layout_marginBottom="20dp"/>
-
-
+          android:layout_marginTop="28dp"
+          android:textSize="20sp"
           app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.498"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/show_name" />
 
@@ -56,7 +65,7 @@
           android:id="@+id/home"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="13dp"
+          android:layout_marginTop="24dp"
           android:text="@string/try_again"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
