@@ -399,7 +399,7 @@ class GamePlay: AppCompatActivity() {
             //time_count.stop()
 
             val intent= Intent(this, results::class.java).apply{
-                putExtra("result","You Lost bro !!!\n read the instructions in the i button and Try Again")
+                putExtra("result","You Lost bro !!!\nread the instructions in the i button and Try Again")
             }
             startActivity(intent)
 
